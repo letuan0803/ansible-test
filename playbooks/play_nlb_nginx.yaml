@@ -1,0 +1,4 @@
+- hosts: nlb
+  become: true
+  roles:
+    - roles/nginx
