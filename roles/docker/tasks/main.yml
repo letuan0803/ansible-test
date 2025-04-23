@@ -9,3 +9,15 @@
 - name: Run Docker installation script
   command: sh /tmp/get-docker.sh
   become: true
+  when: "'docker-ce' not in ansible_facts.packages and 'docker.io' not in ansible_facts.packages"
+
+- name: Install uidmap package
+  apt:
+    name: uidmap
+    state: present
+  become: true
+
+- name: Run dockerd-rootless-setuptool.sh install
+  command: dockerd-rootless-setuptool.sh install
+  become: true
+  when: "'docker-ce' not in ansible_facts.packages and 'docker.io' not in ansible_facts.packages"
