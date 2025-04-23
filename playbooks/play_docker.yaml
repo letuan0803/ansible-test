@@ -1,4 +1,4 @@
 - hosts: docker
   become: true
   roles:
-    - roles/nginx
+    - roles/docker
