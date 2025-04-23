@@ -1,2 +1,31 @@
 ---
 # tasks file for nginx
+
+# Update the apt cache
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: yes
+
+# Install Nginx
+- name: Install Nginx
+  ansible.builtin.apt:
+    name: nginx
+    state: present
+
+# Ensure Nginx is enabled and started
+- name: Ensure Nginx is running
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: yes
+
+# Copy custom Nginx configuration file (optional)
+# - name: Copy Nginx configuration
+#   ansible.builtin.template:
+#     src: nginx.conf.j2
+#     dest: /etc/nginx/nginx.conf
+#     owner: root
+#     group: root
+#     mode: '0644'
+#   notify: Restart Nginx
+
