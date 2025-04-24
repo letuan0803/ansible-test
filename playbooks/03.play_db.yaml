@@ -1,5 +1,5 @@
 - name: Deploy PostgreSQL Database
-  hosts: db_servers
+  hosts: db
   become: true
   vars:
     postgres_user: postgres
