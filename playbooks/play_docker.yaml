@@ -1,3 +1,6 @@
+# This playbook is used to install Docker on the target hosts.
+# It will install Docker and configure it for rootless mode.
+# Recommened to run this script one time on the target hosts. If run multiple times, maybe it will cause some errors.
 - hosts: docker
   become: true
   roles:
