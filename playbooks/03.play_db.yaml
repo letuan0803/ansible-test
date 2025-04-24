@@ -1,0 +1,26 @@
+- name: Deploy PostgreSQL Database
+  hosts: db_servers
+  become: true
+  vars:
+    postgres_user: postgres
+    postgres_password: postgres
+
+  tasks:
+    - name: Install PostgreSQL
+      apt:
+        name: postgresql
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Ensure PostgreSQL is started and enabled
+      service:
+        name: postgresql
+        state: started
+        enabled: yes
+
+    - name: Set PostgreSQL password for the default user
+      become_user: postgres
+      shell: |
+        psql -c "ALTER USER {{ postgres_user }} WITH PASSWORD '{{ postgres_password }}';"
+      args:
+        executable: /bin/bash
