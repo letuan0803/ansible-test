@@ -17,7 +17,7 @@
               server 10.0.128.211:8080;
           }
           
-          upstream backend_resule {
+          upstream backend_result {
               server 10.0.128.251:8081;
               server 10.0.128.211:8081;
           }
@@ -36,10 +36,10 @@
 
           server {
               listen 80;
-              server_name resule.example.com;
+              server_name result.example.com;
 
               location / {
-                  proxy_pass http://backend_resule;
+                  proxy_pass http://backend_result;
                   proxy_set_header Host $host;
                   proxy_set_header X-Real-IP $remote_addr;
                   proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
