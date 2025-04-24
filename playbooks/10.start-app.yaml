@@ -1,0 +1,30 @@
+- hosts: docker
+  become: yes
+  tasks:
+    - name: Ensure Git is installed
+      ansible.builtin.apt:
+        name: git
+        state: present
+        update_cache: yes
+
+    - name: Ensure Docker is installed
+      ansible.builtin.apt:
+        name: docker.io
+        state: present
+        update_cache: yes
+
+    - name: Ensure Docker Compose plugin is installed
+      ansible.builtin.apt:
+        name: docker-compose-plugin
+        state: present
+        update_cache: yes
+
+    - name: Clone the example-voting-app repository
+      ansible.builtin.git:
+        repo: https://github.com/dockersamples/example-voting-app.git
+        dest: /opt/example-voting-app
+
+    - name: Bring up Docker Compose services
+      ansible.builtin.command:
+        cmd: docker compose up -d
+        chdir: /opt/example-voting-app
