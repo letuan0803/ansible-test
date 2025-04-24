@@ -2,15 +2,15 @@
 bamboo-vm-nlb ansible_host=10.0.0.201
 
 [mnt]
-bamboo-vm-mnt 10.0.0.34
+bamboo-vm-mnt ansible_host=10.0.0.34
 
 [docker]
-bamboo-vm-docker-1 10.0.128.251
-bamboo-vm-docker-2 10.0.128.211
+bamboo-vm-docker-1 ansible_host=10.0.128.251
+bamboo-vm-docker-2 ansible_host=10.0.128.211
 
 [mysql]
-bamboo-vm-mysql-1 10.0.128.122
-bamboo-vm-mysql-2 10.0.128.190
+bamboo-vm-mysql-1 ansible_host=10.0.128.122
+bamboo-vm-mysql-2 ansible_host=10.0.128.190
 
 [all:vars]
 ansible_user=ubuntu
