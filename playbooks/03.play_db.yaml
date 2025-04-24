@@ -6,6 +6,10 @@
     postgres_password: postgres
 
   tasks:
+    - name: Ensure APT cache is up to date
+      apt:
+        update_cache: yes
+        cache_valid_time: 300
     - name: Install PostgreSQL
       apt:
         name: postgresql
