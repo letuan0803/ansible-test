@@ -24,7 +24,7 @@
 
           server {
               listen 80;
-              server_name vote.example.com;
+              server_name sub1-testopenstack.misa.vn;
 
               location / {
                   proxy_pass http://backend_vote;
@@ -36,7 +36,7 @@
 
           server {
               listen 80;
-              server_name result.example.com;
+              server_name sub2-testopenstack.misa.vn;
 
               location / {
                   proxy_pass http://backend_result;
