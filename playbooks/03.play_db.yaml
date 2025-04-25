@@ -1,51 +1,54 @@
-- name: Deploy PostgreSQL Database
+---
+- name: Install and configure PostgreSQL on Ubuntu 22.04
   hosts: db
-  become: true
+  become: yes
+
   vars:
-    postgres_user: postgres
-    postgres_password: postgres
+    postgres_password: "postgres"
 
   tasks:
-    - name: Ensure APT cache is up to date
-      apt:
-        update_cache: yes
-        cache_valid_time: 300
-
     - name: Install PostgreSQL
       apt:
         name: postgresql
         state: present
-      become: true
-      become_user: root
-      when: ansible_os_family == "Debian"
+        update_cache: yes
 
-    - name: Ensure PostgreSQL is started and enabled
+    - name: Ensure PostgreSQL is running
       service:
         name: postgresql
         state: started
         enabled: yes
 
-    - name: Configure PostgreSQL to use password authentication
-      lineinfile:
-        path: /etc/postgresql/{{ postgresql_version }}/main/pg_hba.conf
-        regexp: '^local\s+all\s+postgres\s+peer'
-        line: 'local   all             postgres                                md5'
-      notify: Restart PostgreSQL
-
-    - name: Install psycopg2 library for Python
-      apt:
-        name: python3-psycopg2
-        state: present
-      become: true
-
-    - name: Set PostgreSQL password for the default user
+    - name: Set password for the postgres user
+      become_user: postgres
       postgresql_user:
-        name: "{{ postgres_user }}"
+        name: postgres
         password: "{{ postgres_password }}"
-        login_user: postgres
+        role_attr_flags: 'SUPERUSER'
 
-  handlers:
-    - name: Restart PostgreSQL
+    - name: Allow password authentication in pg_hba.conf
+      lineinfile:
+        path: /etc/postgresql/14/main/pg_hba.conf
+        regexp: '^host\s+all\s+all\s+127\.0\.0\.1/32\s+.*$'
+        line: 'host    all             all             127.0.0.1/32            md5'
+        state: present
+        backrefs: yes
+
+    - name: Allow password authentication in pg_hba.conf (IPv6)
+      lineinfile:
+        path: /etc/postgresql/14/main/pg_hba.conf
+        regexp: '^host\s+all\s+all\s+::1/128\s+.*$'
+        line: 'host    all             all             ::1/128                 md5'
+        state: present
+        backrefs: yes
+
+    - name: Ensure PostgreSQL is listening on localhost
+      lineinfile:
+        path: /etc/postgresql/14/main/postgresql.conf
+        regexp: '^#?listen_addresses\s*='
+        line: "listen_addresses = 'localhost'"
+
+    - name: Restart PostgreSQL to apply changes
       service:
         name: postgresql
         state: restarted
