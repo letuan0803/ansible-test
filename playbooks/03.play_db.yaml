@@ -25,8 +25,7 @@
         enabled: yes
 
     - name: Set PostgreSQL password for the default user
-      become_user: postgres
-      shell: |
-        psql -c "ALTER USER {{ postgres_user }} WITH PASSWORD '{{ postgres_password }}';"
-      args:
-        executable: /bin/bash
+      postgresql_user:
+        name: "{{ postgres_user }}"
+        password: "{{ postgres_password }}"
+        login_user: postgres
