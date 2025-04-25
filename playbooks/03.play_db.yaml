@@ -48,11 +48,27 @@
         state: present
         backrefs: yes
 
-    - name: Ensure PostgreSQL listens on localhost
+    - name: Configure md5 authentication for all IPv4 addresses
+      lineinfile:
+        path: /etc/postgresql/14/main/pg_hba.conf
+        regexp: '^host\s+all\s+all\s+0\.0\.0\.0/0\s+.*$'
+        line: 'host    all             all             0.0.0.0/0               md5'
+        state: present
+        backrefs: yes
+
+    - name: Configure md5 authentication for all IPv6 addresses
+      lineinfile:
+        path: /etc/postgresql/14/main/pg_hba.conf
+        regexp: '^host\s+all\s+all\s+::/0\s+.*$'
+        line: 'host    all             all             ::/0                   md5'
+        state: present
+        backrefs: yes
+
+    - name: Ensure PostgreSQL listens on all interfaces
       lineinfile:
         path: /etc/postgresql/14/main/postgresql.conf
         regexp: '^#?listen_addresses\s*='
-        line: "listen_addresses = 'localhost'"
+        line: "listen_addresses = '*'"
 
     - name: Restart PostgreSQL to apply changes
       service:
