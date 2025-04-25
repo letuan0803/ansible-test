@@ -14,12 +14,10 @@
         content: |
           upstream backend_vote {
               server 10.0.128.251:8080;
-              server 10.0.128.211:8080;
           }
           
           upstream backend_result {
               server 10.0.128.251:8081;
-              server 10.0.128.211:8081;
           }
 
           server {

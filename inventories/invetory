@@ -6,11 +6,9 @@ bamboo-vm-mnt ansible_host=10.0.0.34
 
 [docker]
 bamboo-vm-docker-1 ansible_host=10.0.128.251
-bamboo-vm-docker-2 ansible_host=10.0.128.211
 
 [db]
 bamboo-vm-db-1 ansible_host=10.0.128.179
-bamboo-vm-db-2 ansible_host=10.0.128.183
 
 [all:vars]
 ansible_user=ubuntu
