@@ -1,7 +1,7 @@
 ---
 - name: Install and configure PostgreSQL on Ubuntu 22.04
   hosts: db
-  become: yes
+  become: true
 
   vars:
     postgres_password: "postgres"
@@ -19,12 +19,11 @@
         state: started
         enabled: yes
 
-    - name: Set password for the postgres user
-      become_user: postgres
-      postgresql_user:
-        name: postgres
-        password: "{{ postgres_password }}"
-        role_attr_flags: 'SUPERUSER'
+    - name: Set password for the postgres user using psql
+      become: true
+      shell: |
+        sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD '{{ postgres_password }}';"
+
 
     - name: Allow password authentication in pg_hba.conf
       lineinfile:
