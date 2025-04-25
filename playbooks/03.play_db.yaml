@@ -25,6 +25,13 @@
         state: started
         enabled: yes
 
+    - name: Configure PostgreSQL to use password authentication
+      lineinfile:
+        path: /etc/postgresql/{{ postgresql_version }}/main/pg_hba.conf
+        regexp: '^local\s+all\s+postgres\s+peer'
+        line: 'local   all             postgres                                md5'
+      notify: Restart PostgreSQL
+
     - name: Install psycopg2 library for Python
       apt:
         name: python3-psycopg2
@@ -36,3 +43,9 @@
         name: "{{ postgres_user }}"
         password: "{{ postgres_password }}"
         login_user: postgres
+
+  handlers:
+    - name: Restart PostgreSQL
+      service:
+        name: postgresql
+        state: restarted
