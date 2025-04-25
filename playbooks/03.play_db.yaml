@@ -4,14 +4,20 @@
   become: true
 
   vars:
+    postgres_username: "postgres"
     postgres_password: "postgres"
 
   tasks:
-    - name: Install PostgreSQL
+    - name: Update apt cache
       apt:
-        name: postgresql
-        state: present
         update_cache: yes
+
+    - name: Install PostgreSQL server and client
+      apt:
+        name:
+          - postgresql
+          - postgresql-client
+        state: present
 
     - name: Ensure PostgreSQL is running
       service:
@@ -22,10 +28,11 @@
     - name: Set password for the postgres user using psql
       become: true
       shell: |
-        sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD '{{ postgres_password }}';"
+        sudo -u postgres psql -c "ALTER USER {{ postgres_username }} WITH PASSWORD '{{ postgres_password }}';"
+      args:
+        executable: /bin/bash
 
-
-    - name: Allow password authentication in pg_hba.conf
+    - name: Configure md5 authentication for local IPv4
       lineinfile:
         path: /etc/postgresql/14/main/pg_hba.conf
         regexp: '^host\s+all\s+all\s+127\.0\.0\.1/32\s+.*$'
@@ -33,7 +40,7 @@
         state: present
         backrefs: yes
 
-    - name: Allow password authentication in pg_hba.conf (IPv6)
+    - name: Configure md5 authentication for local IPv6
       lineinfile:
         path: /etc/postgresql/14/main/pg_hba.conf
         regexp: '^host\s+all\s+all\s+::1/128\s+.*$'
@@ -41,7 +48,7 @@
         state: present
         backrefs: yes
 
-    - name: Ensure PostgreSQL is listening on localhost
+    - name: Ensure PostgreSQL listens on localhost
       lineinfile:
         path: /etc/postgresql/14/main/postgresql.conf
         regexp: '^#?listen_addresses\s*='
