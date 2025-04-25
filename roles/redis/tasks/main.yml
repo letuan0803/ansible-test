@@ -1,0 +1,26 @@
+---
+# tasks file for redis
+- name: Update apt cache
+  apt:
+    update_cache: yes
+
+- name: Install Redis
+  apt:
+    name: redis-server
+    state: present
+
+- name: Ensure Redis is enabled and started
+  systemd:
+    name: redis-server
+    enabled: yes
+    state: started
+
+- name: Copy custom redis.conf (optional)
+  ansible.builtin.template:
+    src: redis.conf.j2
+    dest: /etc/redis/redis.conf
+    owner: redis
+    group: redis
+    mode: 0644
+  notify: Restart Redis
+  when: redis_conf_custom is defined and redis_conf_custom
