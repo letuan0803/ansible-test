@@ -10,6 +10,7 @@
       apt:
         update_cache: yes
         cache_valid_time: 300
+
     - name: Install PostgreSQL
       apt:
         name: postgresql
@@ -23,6 +24,12 @@
         name: postgresql
         state: started
         enabled: yes
+
+    - name: Install psycopg2 library for Python
+      apt:
+        name: python3-psycopg2
+        state: present
+      become: true
 
     - name: Set PostgreSQL password for the default user
       postgresql_user:
