@@ -21,10 +21,10 @@
 
     - name: Clone the example-voting-app repository
       ansible.builtin.git:
-        repo: https://github.com/dockersamples/example-voting-app.git
-        dest: /opt/example-voting-app
+        repo: https://github.com/letuan0803/example-voting-app.git
+        dest: /opt/example-voting-app2
 
     - name: Bring up Docker Compose services
       ansible.builtin.command:
         cmd: docker compose down && docker compose up -d
-        chdir: /opt/example-voting-app
+        chdir: /opt/example-voting-app2
