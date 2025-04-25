@@ -10,6 +10,9 @@ bamboo-vm-docker-1 ansible_host=10.0.128.251
 [db]
 bamboo-vm-db-1 ansible_host=10.0.128.179
 
+[redis]
+bamboo-vm-redis-1 ansible_host=10.0.128.54
+
 [all:vars]
 ansible_user=ubuntu
 ansible_ssh_private_key_file=/home/ubuntu/cert/bamboo-keypair.pem
